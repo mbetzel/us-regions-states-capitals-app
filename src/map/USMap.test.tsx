@@ -47,11 +47,17 @@ describe('USMap', () => {
     expect(container.querySelectorAll('[data-testid="callout-ring"]')).toHaveLength(1);
   });
 
-  it('shows rings for tiny states in a highlighted region', () => {
-    const { container } = render(<USMap highlight={{ kind: 'region', regionId: 'new-england' }} />);
-    const tiny = STATES.filter((s) => s.tiny && s.region === 'new-england').length;
-    expect(tiny).toBeGreaterThan(0);
-    expect(container.querySelectorAll('[data-testid="callout-ring"]')).toHaveLength(tiny);
+  it('shows no callout rings when a whole region is highlighted', () => {
+    for (const regionId of ['new-england', 'mid-atlantic', 'pacific'] as const) {
+      const { container, unmount } = render(<USMap highlight={{ kind: 'region', regionId }} />);
+      expect(container.querySelectorAll('[data-testid="callout-ring"]')).toHaveLength(0);
+      unmount();
+    }
+  });
+
+  it('shows no callout ring for a large target state', () => {
+    const { container } = render(<USMap highlight={{ kind: 'state', fips: '36' }} />);
+    expect(container.querySelectorAll('[data-testid="callout-ring"]')).toHaveLength(0);
   });
 
   it('tints all states by region in regions color mode', () => {

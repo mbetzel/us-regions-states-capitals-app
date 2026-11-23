@@ -78,7 +78,7 @@ Total 50. Membership lists are covered by `data.test.ts` (each state in exactly 
 - **Not verified on Mike's actual WSL/Windows setup.** Validation ran in a Linux container. On his PC, run `npm run e2e:install` once (downloads Chromium and system libraries, needs sudo) before `npm run e2e`.
 - **R10 evidence is process-only**, and no real child has tried the app. A short play session with Mike's son is recommended.
 - Sound was checked only as a stored setting (toggle and persistence); audible output was not verified.
-- In New England the five tiny-state callout rings overlap on a phone-sized map (see `quiz-regions-feedback-phone.png`). Readable but busy; a possible polish item.
+- ~~In New England the five tiny-state callout rings overlap on a phone-sized map.~~ Fixed after QA: callout rings now appear only when a single tiny state is the target, not for whole-region highlights.
 - Regions mode has only 7 items, so a round is always 7 questions even if 10 or 20 is selected.
 - M8 (optional `#/study` map legend view) is not implemented.
 - The main JS bundle is about 467 kB (156 kB gzipped), mostly map data and libraries. Fine locally.
