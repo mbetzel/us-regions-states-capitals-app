@@ -1,0 +1,13 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-new-england: #3b82f6;
+  --color-mid-atlantic: #b91c1c;
+  --color-southern: #22c55e;
+  --color-midwest: #a855f7;
+  --color-southwest: #f97316;
+  --color-pacific: #fb7185;
+  --color-mountain: #a16207;
+
+  --font-display: 'Fredoka', ui-rounded, system-ui, sans-serif;
+}
