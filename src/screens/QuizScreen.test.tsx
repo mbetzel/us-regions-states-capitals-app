@@ -48,6 +48,8 @@ describe('QuizScreen', () => {
     } else {
       expect(buttons[0]).toHaveAttribute('data-state', 'wrong');
       expect(live).toHaveTextContent(`Nice try! That's ${answer}.`);
+      expect(live).toHaveTextContent("You'll get it next time!");
+      expect(screen.getAllByText("You'll get it next time!")).toHaveLength(1);
     }
     expect(answerButtons().every((b) => b.hasAttribute('disabled'))).toBe(true);
     expect(screen.getByRole('button', { name: 'Next ➜' })).toHaveFocus();
