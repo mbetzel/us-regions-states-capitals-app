@@ -5,6 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Relative base so the built app works from any sub-path (GitHub Pages project site) or locally.
+  base: './',
   plugins: [react(), tailwindcss()],
   test: {
     environment: 'jsdom',
