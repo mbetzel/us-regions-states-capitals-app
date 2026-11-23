@@ -10,5 +10,7 @@ test('home page loads with heading and no console errors', async ({ page }) => {
   await page.goto('/');
 
   await expect(page.getByRole('heading', { name: 'US Geography Quiz' })).toBeVisible();
+  await expect(page.getByRole('img', { name: /Map of the United States/ })).toBeVisible();
+  await expect(page.locator('svg path[data-fips]')).toHaveCount(50);
   expect(errors).toEqual([]);
 });
