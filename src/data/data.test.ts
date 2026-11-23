@@ -117,6 +117,15 @@ describe('states data', () => {
     }
   });
 
+  it('matches each state name to the us-atlas feature name', () => {
+    for (const state of STATES) {
+      expect(
+        (featureById.get(state.fips)?.properties as { name?: string } | undefined)?.name,
+        state.fips,
+      ).toBe(state.name);
+    }
+  });
+
   it('has each capital point inside its own state geometry', () => {
     for (const state of STATES) {
       const shape = featureById.get(state.fips);
