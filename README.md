@@ -2,6 +2,8 @@
 
 A friendly map quiz that helps a 5th grader learn the US regions, states and capitals. Pick a mode, look at the highlighted part of the map, choose one of four answers, and get instant, encouraging feedback.
 
+**Play it online:** https://mbetzel.github.io/us-regions-states-capitals-app/ (redeployed automatically by GitHub Actions on every merge to `main`). Progress is saved in that browser only.
+
 ![Quiz screen](docs/qa/quiz-states-feedback-desktop.png)
 
 ## What you need
