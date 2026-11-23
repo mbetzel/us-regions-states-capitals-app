@@ -37,6 +37,7 @@ export const STATES: StateInfo[] = [
     capital: 'Phoenix',
     capitalLonLat: [-112.07, 33.45],
     region: 'southwest',
+    famousCity: 'Tucson',
   },
   {
     fips: '05',
@@ -210,7 +211,7 @@ export const STATES: StateInfo[] = [
     fips: '27',
     abbr: 'MN',
     name: 'Minnesota',
-    capital: 'Saint Paul',
+    capital: 'St. Paul',
     capitalLonLat: [-93.09, 44.95],
     region: 'midwest',
     famousCity: 'Minneapolis',
@@ -384,6 +385,7 @@ export const STATES: StateInfo[] = [
     capital: 'Nashville',
     capitalLonLat: [-86.78, 36.16],
     region: 'southern',
+    famousCity: 'Memphis',
   },
   {
     fips: '48',
