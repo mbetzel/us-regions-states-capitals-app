@@ -57,7 +57,7 @@ and open the address it prints (usually <http://localhost:4173>).
 | Region       | Color            | States                              |
 | ------------ | ---------------- | ----------------------------------- |
 | New England  | blue             | ME NH VT MA RI CT                   |
-| Mid-Atlantic | dark red         | NY PA NJ DE MD                      |
+| Mid-Atlantic | deep purple      | NY PA NJ DE MD                      |
 | Southern     | green            | KY WV VA AR TN NC LA MS AL GA SC FL |
 | Midwest      | purple           | ND SD NE KS MN IA MO WI IL MI IN OH |
 | Southwest    | orange           | AZ NM OK TX                         |

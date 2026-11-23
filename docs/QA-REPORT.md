@@ -57,7 +57,7 @@ Counts and fills were read from the live SVG in regions mode (one question per r
 | Region | States highlighted | Fill | Matches spec |
 |---|---|---|---|
 | New England | 6 | `#3B82F6` blue | Yes |
-| Mid-Atlantic | 5 | `#B91C1C` dark red | Yes |
+| Mid-Atlantic | 5 | `#6D28D9` deep purple (changed after QA) | Yes |
 | Southern | 12 | `#22C55E` green | Yes |
 | Midwest | 12 | `#A855F7` purple | Yes |
 | Southwest | 4 | `#F97316` orange | Yes |

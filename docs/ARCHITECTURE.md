@@ -65,7 +65,7 @@ export interface Region {
 | Region | Spec color | Proposed hex | States (count) |
 |---|---|---|---|
 | New England | blue | `#3B82F6` | ME, NH, VT, MA, RI, CT (6) |
-| Mid-Atlantic | dark red | `#B91C1C` | NY, PA, NJ, DE, MD (5) |
+| Mid-Atlantic | deep purple (was dark red) | `#6D28D9` | NY, PA, NJ, DE, MD (5) |
 | Southern | green | `#22C55E` | KY, WV, VA, AR, TN, NC, LA, MS, AL, GA, SC, FL (12) |
 | Midwest | purple | `#A855F7` | ND, SD, NE, KS, MN, IA, MO, WI, IL, MI, IN, OH (12) |
 | Southwest | orange | `#F97316` | AZ, NM, OK, TX (4) |
@@ -288,7 +288,7 @@ Suggested order is linear; M2 and M3 can run in parallel after M1.
 
 ## 14. Decisions (answered by Mike, 2026-11-23)
 
-1. **Region colors.** Mid-Atlantic is dark red (`#B91C1C`); Pacific is a lighter red/pink (`#FB7185`).
+1. **Region colors.** Mid-Atlantic was first dark red (`#B91C1C`); on 2026-11-23 Mike changed it to purple, using a deep violet (`#6D28D9`) so it stays distinct from the brighter Midwest purple (`#A855F7`). Pacific is a lighter red/pink (`#FB7185`).
 2. **Git hosting.** Code lives in the GitHub repo `mbetzel/us-regions-states-capitals-app`, which the local WSL project folder is already cloned from. Each milestone is a branch and a pull request reviewed by the reviewer agent and merged by Mike.
 3. **Where it runs.** Locally on Mike's PC for now. No deployment work in v1.
 4. **Region wording.** The label is "Southern", as in the spec.

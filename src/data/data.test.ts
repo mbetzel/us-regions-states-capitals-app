@@ -40,7 +40,7 @@ describe('regions', () => {
 
   it('uses the spec colors', () => {
     expect(REGION_BY_ID['new-england'].color).toBe('#3B82F6');
-    expect(REGION_BY_ID['mid-atlantic'].color).toBe('#B91C1C');
+    expect(REGION_BY_ID['mid-atlantic'].color).toBe('#6D28D9');
     expect(REGION_BY_ID.southern.color).toBe('#22C55E');
     expect(REGION_BY_ID.midwest.color).toBe('#A855F7');
     expect(REGION_BY_ID.southwest.color).toBe('#F97316');
