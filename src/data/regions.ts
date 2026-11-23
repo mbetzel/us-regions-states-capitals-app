@@ -10,7 +10,7 @@ export interface Region {
 
 export const REGIONS: Region[] = [
   { id: 'new-england', name: 'New England', color: '#3B82F6', lightColor: '#BFDBFE' },
-  { id: 'mid-atlantic', name: 'Mid-Atlantic', color: '#B91C1C', lightColor: '#FECACA' },
+  { id: 'mid-atlantic', name: 'Mid-Atlantic', color: '#6D28D9', lightColor: '#DDD6FE' },
   { id: 'southern', name: 'Southern', color: '#22C55E', lightColor: '#BBF7D0' },
   { id: 'midwest', name: 'Midwest', color: '#A855F7', lightColor: '#E9D5FF' },
   { id: 'southwest', name: 'Southwest', color: '#F97316', lightColor: '#FED7AA' },
