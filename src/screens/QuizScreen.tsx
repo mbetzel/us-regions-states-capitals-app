@@ -32,15 +32,12 @@ export default function QuizScreen() {
   const nextButtonRef = useRef<HTMLButtonElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
 
-  // Move focus to Next once answered so Enter or Space continues without a mouse.
+  // Once answered, focus Next so Enter or Space continues without a mouse.
+  // On a new (unanswered) question, focus its heading so focus isn't lost to the page body.
   useEffect(() => {
     if (answered) nextButtonRef.current?.focus();
+    else headingRef.current?.focus();
   }, [answered, index]);
-
-  // A new question moves focus to its heading, so it is not lost to the page body.
-  useEffect(() => {
-    headingRef.current?.focus();
-  }, [index]);
 
   const advance = useCallback(() => {
     if (answered) nextQuestion();
