@@ -1,7 +1,11 @@
+import { useEffect, useRef } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router';
+import { Mascot } from '../components/Mascot';
 import { Stars } from '../components/Stars';
 import { STATE_BY_FIPS } from '../data/states';
+import { celebration } from '../lib/confetti';
 import { isMode } from '../lib/modes';
+import { playFanfare } from '../lib/sound';
 import { missedQuestions, targetName } from '../lib/quizView';
 import type { Question } from '../quiz/engine';
 import { useAppStore } from '../store/useAppStore';
@@ -27,6 +31,17 @@ export default function ResultsScreen() {
   const lastResult = useAppStore((s) => s.lastResult);
   const activeRound = useAppStore((s) => s.activeRound);
   const startRound = useAppStore((s) => s.startRound);
+  const soundOn = useAppStore((s) => s.settings.sound);
+  const celebratedRef = useRef(false);
+
+  const earnedStars = lastResult && lastResult.mode === modeParam ? lastResult.stars : 0;
+  // Fanfare and confetti once per visit to a round with 2+ stars. The ref survives re-renders.
+  useEffect(() => {
+    if (earnedStars < 2 || celebratedRef.current) return;
+    celebratedRef.current = true;
+    playFanfare(soundOn);
+    celebration();
+  }, [earnedStars, soundOn]);
 
   if (!isMode(modeParam)) return <Navigate to="/" replace />;
   const mode = modeParam;
@@ -52,6 +67,8 @@ export default function ResultsScreen() {
   return (
     <main className="min-h-screen bg-sky-200 font-display text-sky-950">
       <div className="mx-auto flex max-w-2xl flex-col gap-6 p-4 sm:p-8">
+        <Mascot mood={lastResult.stars >= 2 ? 'celebrate' : 'encourage'} />
+
         <section className="flex flex-col items-center gap-4 rounded-3xl bg-white p-6 text-center shadow-lg sm:p-8">
           <h1 className="text-xl font-bold text-sky-900">
             {lastResult.drill ? 'Practice round' : 'Round complete'}

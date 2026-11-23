@@ -15,7 +15,7 @@ export function ModeCard({ mode, stars, onSelect }: ModeCardProps) {
     <button
       type="button"
       onClick={onSelect}
-      className="flex w-full flex-col items-center gap-2 rounded-3xl bg-white p-6 text-center shadow-lg transition-transform hover:-translate-y-1 hover:shadow-xl focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
+      className="flex w-full flex-col items-center gap-2 rounded-3xl bg-white p-6 text-center shadow-lg transition-transform motion-safe:active:scale-95 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
     >
       <span aria-hidden="true" className="text-5xl">
         {info.icon}

@@ -33,7 +33,7 @@ export function AnswerButton({ label, keyNumber, state, onPick }: AnswerButtonPr
       data-state={state}
       disabled={state !== 'idle'}
       onClick={onPick}
-      className={`flex min-h-14 w-full items-center gap-3 rounded-2xl border-2 px-4 py-3 text-left text-lg font-bold transition-colors focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:cursor-default ${STYLES[state]}`}
+      className={`flex min-h-14 w-full items-center gap-3 rounded-2xl border-2 px-4 py-3 text-left text-lg font-bold transition focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:cursor-default motion-safe:enabled:hover:scale-[1.02] motion-safe:enabled:active:scale-95 ${STYLES[state]} ${state === 'wrong' ? 'anim-shake' : ''}`}
     >
       <span
         aria-hidden="true"
