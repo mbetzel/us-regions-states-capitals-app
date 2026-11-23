@@ -53,11 +53,11 @@ function USMapImpl({ highlight, colorMode = 'highlight-only', onStateClick }: US
     return { s, fill, level };
   });
 
+  // Callout rings only point at a single tiny target state. A highlighted region is already
+  // big enough to see, and ringing every small state in New England or the Mid-Atlantic
+  // stacks 4-5 overlapping circles that look busy, especially on a phone.
   const ringStates = STATES.filter(
-    (s) =>
-      s.tiny &&
-      highlight &&
-      (highlight.kind === 'region' ? s.region === highlight.regionId : s.fips === highlight.fips),
+    (s) => s.tiny && highlight?.kind === 'state' && s.fips === highlight.fips,
   );
 
   const capital =
