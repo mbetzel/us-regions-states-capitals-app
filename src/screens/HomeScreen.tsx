@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { Mascot } from '../components/Mascot';
 import { ModeCard } from '../components/ModeCard';
 import { MODE_LIST, MODE_INFO } from '../lib/modes';
 import type { Mode } from '../quiz/engine';
@@ -31,9 +32,12 @@ export default function HomeScreen() {
   return (
     <main className="min-h-screen bg-sky-200 font-display text-sky-950">
       <div className="mx-auto flex max-w-4xl flex-col gap-6 p-4 sm:p-8">
-        <header className="pt-4 text-center">
-          <h1 className="text-4xl font-bold sm:text-6xl">US Geography Quiz</h1>
-          <p className="mt-2 text-lg text-sky-900">Pick a game to start!</p>
+        <header className="flex flex-col items-center gap-4 pt-4 text-center">
+          <Mascot mood="idle" message="Hi! Ready to explore the USA?" />
+          <div>
+            <h1 className="text-4xl font-bold sm:text-6xl">US Geography Quiz</h1>
+            <p className="mt-2 text-lg text-sky-900">Pick a game to start!</p>
+          </div>
         </header>
 
         {activeRound && (

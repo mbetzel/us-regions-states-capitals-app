@@ -34,3 +34,90 @@
     animation: none;
   }
 }
+
+/* Fun motion. Everything here is only defined when the child has not asked for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    20% {
+      transform: translateX(-8px);
+    }
+    40% {
+      transform: translateX(7px);
+    }
+    60% {
+      transform: translateX(-5px);
+    }
+    80% {
+      transform: translateX(3px);
+    }
+  }
+
+  @keyframes bounce-soft {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+
+  @keyframes tilt {
+    0%,
+    100% {
+      transform: rotate(-4deg);
+    }
+    50% {
+      transform: rotate(4deg);
+    }
+  }
+
+  @keyframes pop-in {
+    0% {
+      transform: scale(0.85);
+      opacity: 0;
+    }
+    70% {
+      transform: scale(1.04);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  /* A glow ring, not a scale: the button's box stays still so it is easy to tap. */
+  @keyframes pulse-soft {
+    0% {
+      box-shadow: 0 0 0 0 rgb(2 132 199 / 0.45);
+    }
+    70%,
+    100% {
+      box-shadow: 0 0 0 12px rgb(2 132 199 / 0);
+    }
+  }
+
+  .anim-shake {
+    animation: shake 0.45s ease-in-out;
+  }
+
+  .anim-bounce {
+    animation: bounce-soft 0.9s ease-in-out 2;
+  }
+
+  .anim-tilt {
+    animation: tilt 2.4s ease-in-out infinite;
+  }
+
+  .anim-pop-in {
+    animation: pop-in 0.3s ease-out;
+  }
+
+  .anim-pulse-soft {
+    animation: pulse-soft 1.6s ease-in-out infinite;
+  }
+}

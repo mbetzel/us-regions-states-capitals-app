@@ -15,7 +15,7 @@ export function AnswerFeedback({ status, answer }: AnswerFeedbackProps) {
     <div aria-live="polite" className="min-h-14">
       {status === 'correct' && <CorrectMessage />}
       {status === 'wrong' && (
-        <p className="text-xl font-bold text-orange-900">
+        <p className="anim-pop-in text-xl font-bold text-orange-900">
           Nice try! That&apos;s <span className="underline decoration-2">{answer}</span>.
         </p>
       )}
@@ -27,7 +27,7 @@ export function AnswerFeedback({ status, answer }: AnswerFeedbackProps) {
 function CorrectMessage() {
   const [praise] = useState(() => pickPraise());
   return (
-    <p className="text-xl font-bold text-green-800">
+    <p className="anim-pop-in text-xl font-bold text-green-800">
       <span aria-hidden="true">✓ </span>
       {praise}
     </p>
