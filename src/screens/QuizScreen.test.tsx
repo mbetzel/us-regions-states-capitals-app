@@ -88,6 +88,13 @@ describe('QuizScreen', () => {
     expect(screen.getByText('Question 2 of 10')).toBeInTheDocument();
   });
 
+  it('moves focus to the question heading when the next question appears', async () => {
+    renderQuiz();
+    await userEvent.keyboard('1');
+    await userEvent.click(screen.getByRole('button', { name: 'Next ➜' }));
+    expect(screen.getByRole('heading', { name: 'What state is highlighted?' })).toHaveFocus();
+  });
+
   it('redirects home when there is no active round', () => {
     useAppStore.setState({ activeRound: null });
     renderQuiz();

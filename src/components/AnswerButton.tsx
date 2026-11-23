@@ -14,13 +14,15 @@ const STYLES: Record<AnswerState, string> = {
   'reveal-correct': 'border-green-600 bg-green-100 text-green-900',
   // Soft orange, never red: a wrong pick is a "try again" moment, not a failure.
   wrong: 'border-orange-500 bg-orange-100 text-orange-900',
-  disabled: 'border-sky-200 bg-white/60 text-sky-700 opacity-70',
+  // Full-strength text on a near-white fill keeps the locked options readable.
+  disabled: 'border-sky-200 bg-white/80 text-sky-900',
 };
 
 const ICONS: Partial<Record<AnswerState, string>> = {
   correct: '✓',
   'reveal-correct': '✓',
-  wrong: '✗',
+  // A soft return arrow, not a cross: the state and colour carry the meaning.
+  wrong: '↺',
 };
 
 export function AnswerButton({ label, keyNumber, state, onPick }: AnswerButtonProps) {

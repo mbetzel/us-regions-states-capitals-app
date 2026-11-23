@@ -26,11 +26,17 @@ export default function QuizScreen() {
 
   const highlight = useMemo(() => (question ? highlightFor(question) : null), [question]);
   const nextButtonRef = useRef<HTMLButtonElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
 
   // Move focus to Next once answered so Enter or Space continues without a mouse.
   useEffect(() => {
     if (answered) nextButtonRef.current?.focus();
   }, [answered, index]);
+
+  // A new question moves focus to its heading, so it is not lost to the page body.
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, [index]);
 
   const advance = useCallback(() => {
     if (answered) nextQuestion();
@@ -52,6 +58,9 @@ export default function QuizScreen() {
         if (answered) {
           event.preventDefault();
           advance();
+        } else if (event.key === ' ') {
+          // Space must not scroll the page while the question is still open.
+          event.preventDefault();
         }
       }
     };
@@ -103,7 +112,11 @@ export default function QuizScreen() {
 
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
           <section className="flex flex-col gap-3 rounded-3xl bg-white p-4 shadow-lg sm:p-6 lg:w-[60%]">
-            <p className="text-2xl font-bold sm:text-3xl">
+            <h2
+              ref={headingRef}
+              tabIndex={-1}
+              className="text-2xl font-bold outline-none sm:text-3xl"
+            >
               {mode === 'capitals' ? (
                 <>
                   What is the capital of <strong>{STATE_BY_FIPS[question.targetKey].name}</strong>?
@@ -111,7 +124,7 @@ export default function QuizScreen() {
               ) : (
                 question.prompt
               )}
-            </p>
+            </h2>
             {highlight && <USMap highlight={highlight} />}
           </section>
 

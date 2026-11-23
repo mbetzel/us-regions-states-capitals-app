@@ -103,12 +103,20 @@ export function buildRound(
   length: RoundLength,
   progress: Progress,
   rng: Rng,
-  { practiceMistakes = false }: { practiceMistakes?: boolean } = {},
+  {
+    practiceMistakes = false,
+    targetKeys,
+  }: { practiceMistakes?: boolean; targetKeys?: string[] } = {},
 ): Question[] {
   const ids = allItemIds(mode);
   const count = length === 'all' ? ids.length : Math.min(length, ids.length);
+  // A drill asks exactly these items: no length cap, no weighting, no duplicates.
+  const validIds = new Set(ids);
+  const drillKeys = [...new Set(targetKeys ?? [])].filter((key) => validIds.has(key));
   let picked: string[];
-  if (length === 'all') {
+  if (drillKeys.length > 0) {
+    picked = shuffle(drillKeys, rng);
+  } else if (length === 'all') {
     picked = shuffle(ids, rng);
   } else if (practiceMistakes) {
     const weights = ids.map((key) => BOX_WEIGHTS[safeBox(progress[`${mode}:${key}`]?.box)]);

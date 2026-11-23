@@ -40,6 +40,8 @@ export interface ActiveRound {
   questions: Question[];
   index: number;
   answers: (string | null)[];
+  /** True for a "practice missed ones" round. Drills do not change bestScores. */
+  drill?: boolean;
 }
 
 export interface LastResult {
@@ -49,6 +51,7 @@ export interface LastResult {
   score: number;
   total: number;
   stars: Stars;
+  drill?: boolean;
 }
 
 /** The slice of state that is written to localStorage. */
@@ -64,8 +67,11 @@ export interface AppActions {
   setRoundLength: (length: RoundLength) => void;
   toggleSound: () => void;
   togglePracticeMistakes: () => void;
-  /** Builds a new round from the current settings and progress. Clears lastResult. */
-  startRound: (mode: Mode, rng?: Rng) => void;
+  /**
+   * Builds a new round from the current settings and progress. Clears lastResult.
+   * With `targetKeys`, the round asks exactly those items and is marked as a drill.
+   */
+  startRound: (mode: Mode, rng?: Rng, opts?: { targetKeys?: string[] }) => void;
   /**
    * Records the answer for the current question. Only the first answer per question counts;
    * later calls change nothing and return the correctness of the recorded answer.
@@ -172,6 +178,9 @@ function sanitizeAnswers(v: unknown, length: number): (string | null)[] {
   return Array.from({ length }, (_, i) => (typeof arr[i] === 'string' ? (arr[i] as string) : null));
 }
 
+/** Keeps the optional drill flag only when it is set, so ordinary rounds stay unchanged. */
+const drillField = (v: Obj): { drill?: true } => (v.drill === true ? { drill: true } : {});
+
 function sanitizeActiveRound(v: unknown): ActiveRound | null {
   if (!isObj(v) || !isMode(v.mode)) return null;
   const questions = sanitizeQuestions(v.questions);
@@ -188,6 +197,7 @@ function sanitizeActiveRound(v: unknown): ActiveRound | null {
     questions,
     index: v.index as number,
     answers: sanitizeAnswers(v.answers, questions.length),
+    ...drillField(v),
   };
 }
 
@@ -203,6 +213,7 @@ function sanitizeLastResult(v: unknown): LastResult | null {
     score: v.score as number,
     total: v.total as number,
     stars: v.stars,
+    ...drillField(v),
   };
 }
 
@@ -271,10 +282,12 @@ export const useAppStore = create<AppState>()(
           settings: { ...s.settings, practiceMistakes: !s.settings.practiceMistakes },
         })),
 
-      startRound: (mode, rng = defaultRng) => {
+      startRound: (mode, rng = defaultRng, opts = {}) => {
         const { settings, progress } = get();
+        const drill = opts.targetKeys !== undefined;
         const questions = buildRound(mode, settings.roundLength, progress, rng, {
           practiceMistakes: settings.practiceMistakes,
+          targetKeys: opts.targetKeys,
         });
         set({
           activeRound: {
@@ -282,6 +295,7 @@ export const useAppStore = create<AppState>()(
             questions,
             index: 0,
             answers: questions.map(() => null),
+            ...(drill ? { drill: true } : {}),
           },
           lastResult: null,
         });
@@ -319,16 +333,31 @@ export const useAppStore = create<AppState>()(
         }
 
         // Past the last question: finish the round.
-        const { mode, questions, answers } = activeRound;
+        const { mode, questions, answers, drill } = activeRound;
         const total = questions.length;
         const score = questions.filter((q, i) => {
           const a = answers[i];
           return a !== null && grade(q, a);
         }).length;
         const stars = starsFor(score, total);
+        const result: LastResult = {
+          mode,
+          questions,
+          answers,
+          score,
+          total,
+          stars,
+          ...(drill ? { drill: true } : {}),
+        };
+
+        // Drills only practise known items, so they never change the best score.
+        if (drill) {
+          set({ activeRound: null, lastResult: result });
+          return;
+        }
+
         const pct = total > 0 ? Math.round((score / total) * 100) : 0;
         const now = new Date().toISOString();
-
         const prev = get().bestScores[mode];
         const best: BestScore =
           !prev || pct > prev.bestPct
@@ -337,7 +366,7 @@ export const useAppStore = create<AppState>()(
 
         set({
           activeRound: null,
-          lastResult: { mode, questions, answers, score, total, stars },
+          lastResult: result,
           bestScores: { ...get().bestScores, [mode]: best },
         });
       },

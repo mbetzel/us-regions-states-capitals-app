@@ -27,35 +27,35 @@ export default function ResultsScreen() {
   const lastResult = useAppStore((s) => s.lastResult);
   const activeRound = useAppStore((s) => s.activeRound);
   const startRound = useAppStore((s) => s.startRound);
-  const practiceMistakes = useAppStore((s) => s.settings.practiceMistakes);
-  const togglePracticeMistakes = useAppStore((s) => s.togglePracticeMistakes);
 
   if (!isMode(modeParam)) return <Navigate to="/" replace />;
   const mode = modeParam;
   if (!lastResult || lastResult.mode !== mode) {
-    // "Try again" and "Practice" start a round, which clears lastResult. The router
-    // navigates to the quiz asynchronously, so render nothing until it arrives.
-    if (activeRound?.mode === mode) return null;
+    // "Try again" and "Practice" start a round, which clears lastResult. Going back
+    // from the quiz then lands here with a round in progress, so send it to the quiz.
+    if (activeRound?.mode === mode) return <Navigate to={`/quiz/${mode}`} replace />;
     return <Navigate to="/" replace />;
   }
   const missed = missedQuestions(lastResult.questions, lastResult.answers);
 
+  // Replace this results entry so Back from the quiz never returns to a stale result.
   const tryAgain = () => {
     startRound(mode);
-    navigate(`/quiz/${mode}`);
+    navigate(`/quiz/${mode}`, { replace: true });
   };
 
   const practiceMissed = () => {
-    if (!practiceMistakes) togglePracticeMistakes();
-    startRound(mode);
-    navigate(`/quiz/${mode}`);
+    startRound(mode, undefined, { targetKeys: missed.map((q) => q.targetKey) });
+    navigate(`/quiz/${mode}`, { replace: true });
   };
 
   return (
     <main className="min-h-screen bg-sky-200 font-display text-sky-950">
       <div className="mx-auto flex max-w-2xl flex-col gap-6 p-4 sm:p-8">
         <section className="flex flex-col items-center gap-4 rounded-3xl bg-white p-6 text-center shadow-lg sm:p-8">
-          <h1 className="text-xl font-bold text-sky-900">Round complete</h1>
+          <h1 className="text-xl font-bold text-sky-900">
+            {lastResult.drill ? 'Practice round' : 'Round complete'}
+          </h1>
           <p className="text-6xl font-bold sm:text-7xl">{`${lastResult.score} / ${lastResult.total}`}</p>
           <Stars count={lastResult.stars} />
           <p className="text-2xl font-bold">{MESSAGES[lastResult.stars]}</p>

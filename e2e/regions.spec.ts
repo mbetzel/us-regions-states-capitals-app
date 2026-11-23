@@ -19,3 +19,14 @@ test('try again starts a fresh regions round', async ({ page }) => {
   await expect(page).toHaveURL(/\/quiz\/regions$/);
   await expect(page.getByText('Question 1 of 7')).toBeVisible();
 });
+
+test('going back after try again does not land on a blank results page', async ({ page }) => {
+  await startMode(page, 'Regions');
+  await answerWholeRound(page, 7);
+
+  await page.getByRole('button', { name: 'Try again' }).click();
+  await expect(page.getByText('Question 1 of 7')).toBeVisible();
+
+  await page.goBack();
+  await expect(page.getByRole('heading', { name: 'US Geography Quiz' })).toBeVisible();
+});

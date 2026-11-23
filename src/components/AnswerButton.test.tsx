@@ -30,12 +30,12 @@ describe('AnswerButton', () => {
     expect(button).toBeDisabled();
   });
 
-  it('shows a soft orange cross when wrong, not red', () => {
+  it('shows a soft orange return arrow when wrong, not red', () => {
     const { button } = renderButton('wrong');
     expect(button).toHaveAttribute('data-state', 'wrong');
     expect(button).toHaveClass('bg-orange-100');
     expect(button).not.toHaveClass('bg-red-100');
-    expect(button).toHaveTextContent('✗');
+    expect(button).toHaveTextContent('↺');
     expect(button).toBeDisabled();
   });
 

@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { startMode } from './quiz-helpers';
+import { answerWholeRound, expectResults, startMode } from './quiz-helpers';
 
 test('a refresh mid-round resumes at the next unanswered question', async ({ page }) => {
   await startMode(page, 'States');
@@ -20,6 +20,27 @@ test('a refresh mid-round resumes at the next unanswered question', async ({ pag
   await expect(
     page.getByRole('button', { name: 'Keep going: States (question 4 of 10)' }),
   ).toBeVisible();
+});
+
+test('a refresh after answering keeps the question locked', async ({ page }) => {
+  await startMode(page, 'States');
+  await page.getByRole('group', { name: 'Answer choices' }).getByRole('button').first().click();
+
+  await page.reload();
+  await expect(page.getByText('Question 1 of 10')).toBeVisible();
+  // Whether the first pick was right or wrong, the right answer shows green and is locked.
+  await expect(page.locator('[data-state="correct"], [data-state="reveal-correct"]')).toHaveCount(
+    1,
+  );
+  await expect(page.getByRole('button', { name: /^Next/ })).toBeVisible();
+});
+
+test('a refresh on the results page still shows the score', async ({ page }) => {
+  await startMode(page, 'Regions');
+  const correct = await answerWholeRound(page, 7);
+
+  await page.reload();
+  await expectResults(page, 'regions', correct, 7);
 });
 
 test('reset progress clears the stars', async ({ page }) => {
