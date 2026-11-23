@@ -355,4 +355,10 @@ describe('createSafeStorage', () => {
     expect(() => storage.removeItem('k')).not.toThrow();
     expect(storage.getItem('k')).toBeNull();
   });
+
+  it('does not advance past an unanswered question', () => {
+    useAppStore.getState().startRound('regions');
+    useAppStore.getState().nextQuestion();
+    expect(useAppStore.getState().activeRound?.index).toBe(0);
+  });
 });

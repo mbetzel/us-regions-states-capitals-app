@@ -309,6 +309,8 @@ export const useAppStore = create<AppState>()(
       nextQuestion: () => {
         const { activeRound } = get();
         if (!activeRound) return;
+        // Don't let a question be skipped without an answer.
+        if (activeRound.answers[activeRound.index] == null) return;
 
         const next = activeRound.index + 1;
         if (next < activeRound.questions.length) {
