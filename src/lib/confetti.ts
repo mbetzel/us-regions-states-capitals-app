@@ -18,10 +18,10 @@ export function bigBurst(): void {
   void confetti({ ...base, particleCount: 50, angle: 120, spread: 55, origin: { x: 1, y: 0.8 } });
 }
 
-/** A few spaced bursts for finishing a round with two or more stars. */
-export function celebration(): void {
-  if (prefersReducedMotion()) return;
+/** A few spaced bursts for finishing a round with two or more stars. Returns a cancel function. */
+export function celebration(): () => void {
+  if (prefersReducedMotion()) return () => {};
   void confetti({ ...base, particleCount: 120, spread: 90, origin: { y: 0.6 } });
-  setTimeout(() => bigBurst(), 350);
-  setTimeout(() => bigBurst(), 900);
+  const timers = [setTimeout(() => bigBurst(), 350), setTimeout(() => bigBurst(), 900)];
+  return () => timers.forEach(clearTimeout);
 }

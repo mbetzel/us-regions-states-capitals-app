@@ -169,10 +169,7 @@ export default function QuizScreen() {
               ))}
             </div>
 
-            <Mascot
-              mood={mascotMood}
-              message={feedback === 'wrong' ? "You'll get it next time!" : undefined}
-            />
+            <Mascot mood={mascotMood} />
 
             <AnswerFeedback status={feedback} answer={question.answer} />
 

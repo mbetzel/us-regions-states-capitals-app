@@ -40,7 +40,8 @@ export default function ResultsScreen() {
     if (earnedStars < 2 || celebratedRef.current) return;
     celebratedRef.current = true;
     playFanfare(soundOn);
-    celebration();
+    const cancel = celebration();
+    return cancel;
   }, [earnedStars, soundOn]);
 
   if (!isMode(modeParam)) return <Navigate to="/" replace />;

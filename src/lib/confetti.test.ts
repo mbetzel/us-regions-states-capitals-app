@@ -44,6 +44,15 @@ describe('confetti', () => {
     expect(confettiMock.mock.calls.length).toBeGreaterThan(4);
   });
 
+  it('celebration returns a cancel function that stops the pending bursts', () => {
+    mockReducedMotion(false);
+    const cancel = celebration();
+    expect(confettiMock).toHaveBeenCalledTimes(1);
+    cancel();
+    vi.runAllTimers();
+    expect(confettiMock).toHaveBeenCalledTimes(1);
+  });
+
   it('is a no-op under prefers-reduced-motion', () => {
     mockReducedMotion(true);
     smallBurst();

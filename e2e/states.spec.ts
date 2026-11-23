@@ -87,6 +87,8 @@ test('states round of 10 questions ends on results with a matching score', async
 test('number key answers, then Enter advances to question 2', async ({ page }) => {
   await startMode(page, 'States');
   await expect(page.getByText('Question 1 of 10')).toBeVisible();
+  // The heading takes focus in the same effect pass that attaches the key listener.
+  await expect(page.getByRole('heading', { name: 'What state is highlighted?' })).toBeFocused();
 
   await page.keyboard.press('1');
   // Focus moving to Next means the answered-state effects have run.
