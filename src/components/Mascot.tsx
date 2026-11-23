@@ -52,10 +52,10 @@ function Face({ mood }: { mood: MascotMood }) {
       <>
         <circle cx="45" cy="52" r="5" fill={INK} />
         <circle cx="75" cy="52" r="5" fill={INK} />
-        <path d="M38 44 L52 47" stroke={INK} strokeWidth="3" strokeLinecap="round" />
-        <path d="M82 44 L68 47" stroke={INK} strokeWidth="3" strokeLinecap="round" />
+        <path d="M38 45 L52 41" stroke={INK} strokeWidth="3" strokeLinecap="round" />
+        <path d="M82 45 L68 41" stroke={INK} strokeWidth="3" strokeLinecap="round" />
         <path
-          d="M46 82 Q60 78 74 82"
+          d="M47 78 Q60 86 73 78"
           fill="none"
           stroke={INK}
           strokeWidth="4"
