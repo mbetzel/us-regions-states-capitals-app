@@ -89,7 +89,8 @@ test('number key answers, then Enter advances to question 2', async ({ page }) =
   await expect(page.getByText('Question 1 of 10')).toBeVisible();
 
   await page.keyboard.press('1');
-  await expect(page.getByRole('button', { name: /^Next/ })).toBeVisible();
+  // Focus moving to Next means the answered-state effects have run.
+  await expect(page.getByRole('button', { name: /^Next/ })).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page.getByText('Question 2 of 10')).toBeVisible();
 });
