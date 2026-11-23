@@ -79,6 +79,75 @@ describe('startRound', () => {
   });
 });
 
+describe('practice drill rounds', () => {
+  const missedKeys = ['17', '39', '41'];
+
+  it('asks exactly the target items and marks the round as a drill', () => {
+    state().startRound('states', mulberry32(30), { targetKeys: missedKeys });
+    const round = state().activeRound;
+    expect(round?.drill).toBe(true);
+    expect(round?.questions.map((q) => q.targetKey).sort()).toEqual([...missedKeys].sort());
+  });
+
+  it('ordinary rounds are not marked as drills', () => {
+    state().startRound('states', mulberry32(31));
+    expect(state().activeRound?.drill).toBeUndefined();
+  });
+
+  it('a finished drill keeps the flag on lastResult', () => {
+    state().startRound('states', mulberry32(32), { targetKeys: missedKeys });
+    playWholeRound(true);
+    expect(state().lastResult?.drill).toBe(true);
+    expect(state().lastResult?.total).toBe(3);
+  });
+
+  it('a drill does not change bestScores but still updates progress', () => {
+    state().startRound('states', mulberry32(33), { targetKeys: missedKeys });
+    playWholeRound(true);
+
+    expect(state().bestScores).toEqual({});
+    for (const key of missedKeys) {
+      expect(state().progress[`states:${key}`]).toMatchObject({ seen: 1, correct: 1, box: 1 });
+    }
+  });
+
+  it('a drill leaves an existing best score alone', () => {
+    state().startRound('states', mulberry32(34));
+    playWholeRound(true);
+    const before = state().bestScores.states;
+
+    state().startRound('states', mulberry32(35), { targetKeys: missedKeys });
+    playWholeRound(false);
+    expect(state().bestScores.states).toEqual(before);
+  });
+
+  it('keeps the drill flag through rehydration and drops invalid flags', async () => {
+    const questions = buildRound('states', 10, {}, mulberry32(36), { targetKeys: missedKeys });
+    localStorage.setItem(
+      'usgeo:v1',
+      JSON.stringify({
+        state: {
+          activeRound: { mode: 'states', questions, index: 0, answers: [], drill: true },
+          lastResult: {
+            mode: 'states',
+            questions,
+            answers: questions.map(() => null),
+            score: 0,
+            total: 3,
+            stars: 0,
+            drill: 'yes',
+          },
+        },
+        version: 1,
+      }),
+    );
+
+    await useAppStore.persist.rehydrate();
+    expect(state().activeRound?.drill).toBe(true);
+    expect(state().lastResult?.drill).toBeUndefined();
+  });
+});
+
 describe('answerCurrent', () => {
   it('records the answer, updates progress and returns correctness', () => {
     state().startRound('regions', mulberry32(5));

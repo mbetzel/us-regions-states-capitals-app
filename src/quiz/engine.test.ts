@@ -169,6 +169,40 @@ describe('buildRound', () => {
     expect(lowCount).toBeGreaterThan(highCount * 2);
   });
 
+  it('targetKeys drills exactly those items, ignoring length and practiceMistakes', () => {
+    const keys = ['17', '39', '41'];
+    for (const practiceMistakes of [false, true]) {
+      for (const len of [10, 20, 'all'] as const) {
+        const round = buildRound('states', len, {}, mulberry32(21), {
+          practiceMistakes,
+          targetKeys: keys,
+        });
+        expect(round.map((q) => q.targetKey).sort()).toEqual([...keys].sort());
+      }
+    }
+  });
+
+  it('targetKeys drops duplicates and keys that are not valid for the mode', () => {
+    const round = buildRound('states', 10, {}, mulberry32(22), {
+      targetKeys: ['17', '17', '99', 'midwest', '39'],
+    });
+    expect(round.map((q) => q.targetKey).sort()).toEqual(['17', '39']);
+  });
+
+  it('empty or all-invalid targetKeys falls back to a normal round', () => {
+    const normal = buildRound('states', 10, {}, mulberry32(23));
+    expect(buildRound('states', 10, {}, mulberry32(23), { targetKeys: [] })).toEqual(normal);
+    const invalid = buildRound('states', 10, {}, mulberry32(23), { targetKeys: ['99'] });
+    expect(invalid).toEqual(normal);
+  });
+
+  it('targetKeys questions are built for the requested mode', () => {
+    const round = buildRound('capitals', 10, {}, mulberry32(24), { targetKeys: ['06'] });
+    expect(round).toHaveLength(1);
+    expect(round[0].id).toBe('capitals:06');
+    expect(round[0].prompt).toBe('What is the capital of California?');
+  });
+
   it('practiceMistakes treats unseen items as box 0', () => {
     const progress: Progress = {};
     for (const id of allItemIds('states').slice(0, 25)) {
