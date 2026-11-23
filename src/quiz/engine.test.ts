@@ -214,3 +214,33 @@ describe('starsFor', () => {
     expect(starsFor(0, 0)).toBe(0);
   });
 });
+
+describe('review regressions', () => {
+  it('treats a corrupt stored box as box 0', () => {
+    const bad = { 'states:17': { seen: 1, correct: 0, box: 9 } } as unknown as Progress;
+    expect(updateProgress(bad, 'states:17', true)['states:17'].box).toBe(1);
+    expect(() =>
+      buildRound('states', 10, bad, mulberry32(1), { practiceMistakes: true }),
+    ).not.toThrow();
+  });
+
+  it('gives unique capital choices for South Carolina (Charleston collision)', () => {
+    for (let seed = 0; seed < 50; seed++) {
+      const choices = makeChoices('capitals', '45', mulberry32(seed));
+      expect(new Set(choices).size).toBe(4);
+      expect(choices).toContain('Columbia');
+    }
+  });
+
+  it('handles degenerate rngs', () => {
+    for (const rng of [() => 0, () => 0.9999999]) {
+      for (const mode of ['regions', 'states', 'capitals'] as const) {
+        const round = buildRound(mode, 10, {}, rng, { practiceMistakes: true });
+        for (const q of round) {
+          expect(new Set(q.choices).size).toBe(4);
+          expect(q.choices).toContain(q.answer);
+        }
+      }
+    }
+  });
+});

@@ -71,7 +71,7 @@ export function makeChoices(mode: Mode, targetKey: string, rng: Rng): string[] {
   const label = (s: (typeof STATES)[number]) => (mode === 'states' ? s.name : s.capital);
 
   if (mode === 'states') {
-    const nSame = Math.min(sameRegion.length, 1 + Math.floor(rng() * 2));
+    const nSame = Math.min(sameRegion.length, Math.min(2, 1 + Math.floor(rng() * 2)));
     fill(chosen, sameRegion.slice(0, nSame).map(label), CHOICE_COUNT);
     fill(chosen, elsewhere.map(label), CHOICE_COUNT);
     fill(chosen, sameRegion.map(label), CHOICE_COUNT);
@@ -111,12 +111,17 @@ export function buildRound(
   if (length === 'all') {
     picked = shuffle(ids, rng);
   } else if (practiceMistakes) {
-    const weights = ids.map((key) => BOX_WEIGHTS[progress[`${mode}:${key}`]?.box ?? 0]);
+    const weights = ids.map((key) => BOX_WEIGHTS[safeBox(progress[`${mode}:${key}`]?.box)]);
     picked = pickWeighted(ids, weights, count, rng);
   } else {
     picked = sample(ids, count, rng);
   }
   return picked.map((key) => makeQuestion(mode, key, rng));
+}
+
+/** Clamp a possibly corrupt stored box value to 0..3. */
+function safeBox(box: unknown): 0 | 1 | 2 | 3 {
+  return typeof box === 'number' && box >= 0 && box <= 3 ? (Math.floor(box) as 0 | 1 | 2 | 3) : 0;
 }
 
 export function grade(question: Question, choice: string): boolean {
@@ -125,7 +130,7 @@ export function grade(question: Question, choice: string): boolean {
 
 export function updateProgress(progress: Progress, questionId: string, correct: boolean): Progress {
   const prev = progress[questionId] ?? { seen: 0, correct: 0, box: 0 };
-  const box = correct ? (Math.min(3, prev.box + 1) as 0 | 1 | 2 | 3) : 0;
+  const box = correct ? (Math.min(3, safeBox(prev.box) + 1) as 0 | 1 | 2 | 3) : 0;
   return {
     ...progress,
     [questionId]: {
